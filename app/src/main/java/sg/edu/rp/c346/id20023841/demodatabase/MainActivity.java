@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Task> alTasks;
     ArrayAdapter<String> aa;
+    boolean asc = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 tvResult.setText(txt);
 
                 alTasks.clear();
-                alTasks.addAll(db.getTasks());
+                alTasks.addAll(db.getTasks(asc));
+
+                asc = !asc;
                 aa.notifyDataSetChanged();
 
                 etDesc.setText(null);

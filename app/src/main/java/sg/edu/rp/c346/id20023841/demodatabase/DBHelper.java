@@ -85,7 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return tasks;
     }
 
-    public ArrayList<Task> getTasks() {
+    public ArrayList<Task> getTasks(boolean asc) {
         ArrayList<Task> tasks = new ArrayList<Task>();
         String selectQuery = "SELECT " + COLUMN_ID + ", "
                 + COLUMN_DESCRIPTION + ", "
@@ -93,30 +93,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " FROM " + TABLE_TASK
                 + " ORDER BY " + COLUMN_DESCRIPTION;
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String description = cursor.getString(1);
-                String date = cursor.getString(2);
-                Task obj = new Task(id, description, date);
-                tasks.add(obj);
-            } while (cursor.moveToNext());
+        if(asc){
+            selectQuery += " ASC";
+        }else{
+            selectQuery +=" DESC";
         }
-        cursor.close();
-        db.close();
-        return tasks;
-    }
-
-    public ArrayList<Task> getTasks2() {
-        ArrayList<Task> tasks = new ArrayList<Task>();
-        String selectQuery = "SELECT " + COLUMN_ID + ", "
-                + COLUMN_DESCRIPTION + ", "
-                + COLUMN_DATE
-                + " FROM " + TABLE_TASK
-                + " ORDER BY " + COLUMN_DESCRIPTION + " DESC";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -130,6 +111,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 tasks.add(obj);
             } while (cursor.moveToNext());
         }
+
         cursor.close();
         db.close();
         return tasks;
